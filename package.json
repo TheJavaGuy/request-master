@@ -1,5 +1,5 @@
 {
-  "name": "request",
+  "name": "request-master",
   "description": "Simplified HTTP request client.",
   "keywords": [
     "http",
@@ -7,14 +7,17 @@
     "util",
     "utility"
   ],
-  "version": "2.88.1",
+  "version": "2.89.0-0",
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com>",
+  "contributors": [
+    {"name": "Ivan Milosavljević (TheJavaGuy)", "email": "TheJavaGuy@yandex.com"}
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/request/request.git"
+    "url": "https://github.com/TheJavaGuy/request-master"
   },
   "bugs": {
-    "url": "http://github.com/request/request/issues"
+    "url": "https://github.com/TheJavaGuy/request-master/issues"
   },
   "license": "Apache-2.0",
   "engines": {
