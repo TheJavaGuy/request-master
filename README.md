@@ -1,21 +1,20 @@
 # RequestMaster - Simplified HTTP/HTTPS client
-[![npm package](https://nodei.co/npm/request.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/request/)
+[![npm package](https://nodei.co/npm/request-master.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/request-master/)
 [![Build status](https://img.shields.io/travis/request/request/master.svg?style=flat-square)](https://travis-ci.org/request/request)
 [![Coverage](https://img.shields.io/codecov/c/github/request/request.svg?style=flat-square)](https://codecov.io/github/request/request?branch=master)
 [![Coverage](https://img.shields.io/coveralls/request/request.svg?style=flat-square)](https://coveralls.io/r/request/request)
 [![Dependency Status](https://img.shields.io/david/request/request.svg?style=flat-square)](https://david-dm.org/request/request)
 [![Known Vulnerabilities](https://snyk.io/test/npm/request/badge.svg?style=flat-square)](https://snyk.io/test/npm/request)
-[![Gitter](https://img.shields.io/badge/gitter-join_chat-blue.svg?style=flat-square)](https://gitter.im/request/request?utm_source=badge)
 
 # Under active development!
-RequestMaster is a drop-in, API compatible replacement for the original Request! Original Request library [is deprecated](https://github.com/request/request/issues/3142) as of Feb 11th 2020. But don't worry, **RequestMaster is actively developed**! We'll deliver new releases once a month, starting from April 2020.
+RequestMaster is a drop-in, API compatible replacement for the original Request! Original Request library [is deprecated](https://github.com/request/request/issues/3142) as of Feb 11th 2020. But don't worry, **RequestMaster is actively developed**! We'll deliver new releases once a quarter, starting from Q4 2020.
 
 ## Super simple to use
 RequestMaster is designed to be the simplest way possible to make HTTP and HTTPS calls. It follows redirects by default.
 
 ```js
 const request = require('request-master');
-request('https://thejavaguy.org', function (error, response, body) {
+request('https://thejavaguy.org', function onResponse(error, response, body) {
   console.error('error:', error); // Print the error if one occurred
   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
   console.log('body:', body); // Print the HTML
@@ -30,12 +29,15 @@ request('https://thejavaguy.org', function (error, response, body) {
 - [Custom HTTP Headers](#custom-http-headers)
 - [OAuth Signing](#oauth-signing)
 - [Proxies](#proxies)
-- [Unix Domain Sockets](#unix-domain-sockets)
+- [UNIX Domain Sockets](#unix-domain-sockets)
 - [TLS/SSL Protocol](#tlsssl-protocol)
 - [Support for HAR 1.2](#support-for-har-12)
-- [**All Available Options**](#requestoptions-callback)
+- [All Available Options](#all-available-options)
+- [Convenience methods](#convenience-methods)
+- [Debugging](#debugging)
+- [Timeouts](#timeouts)
+- [Examples](#examples)
 
-RequestMaster also offers [convenience methods](#convenience-methods) like `request.defaults` and `request.post`, and there are lots of [usage examples](#examples) and several [debugging techniques](#debugging).
 ---
 
 ## Streaming
@@ -127,6 +129,7 @@ http.createServer(function (req, resp) {
 You can still use intermediate proxies, the requests will still follow HTTP forwards, etc.
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Promises & Async/Await
@@ -140,6 +143,7 @@ Several alternative interfaces are provided by the original request team, includ
 Also, [`util.promisify`](https://nodejs.org/api/util.html#util_util_promisify_original), which is available from Node.js v8.0 can be used to convert a regular function that takes a callback to return a promise instead.
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Forms
@@ -241,6 +245,7 @@ function (error, response, body) {
 ```
 
 [back to top](#table-of-contents)
+
 ---
 
 ## HTTP Authentication
@@ -293,18 +298,19 @@ Digest authentication is supported, but it only works with `sendImmediately` set
 Bearer authentication is supported, and is activated when the `bearer` value is available. The value may be either a `String` or a `Function` returning a `String`. Using a function to supply the bearer token is particularly useful if used in conjunction with `defaults` to allow a single function to supply the last known token at the time of sending a request, or to compute one on the fly.
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Custom HTTP Headers
 HTTP Headers, such as `User-Agent`, can be set in the `options` object. In the example below, we call the github API to find out the number of stars and forks for the request repository. This requires a custom `User-Agent` header as well as https.
 
 ```js
-const request = require('request');
+const request = require('request-master');
 
 const options = {
-  url: 'https://api.github.com/repos/request/request',
+  url: 'https://api.github.com/repos/TheJavaGuy/request-master',
   headers: {
-    'User-Agent': 'request'
+    'User-Agent': 'request-master'
   }
 };
 
@@ -320,6 +326,7 @@ request(options, callback);
 ```
 
 [back to top](#table-of-contents)
+
 ---
 
 ## OAuth Signing
@@ -398,6 +405,7 @@ To use [Request Body Hash](https://oauth.googlecode.com/svn/spec/ext/body_hash/1
 * Automatically generate the body hash by passing `body_hash: true`
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Proxies
@@ -493,6 +501,7 @@ Here are some examples of valid `no_proxy` values:
  * `*` - ignore `https_proxy`/`http_proxy` environment variables altogether.
 
 [back to top](#table-of-contents)
+
 ---
 
 ## UNIX Domain Sockets
@@ -506,6 +515,7 @@ RequestMaster supports making requests to [UNIX Domain Sockets](https://en.wikip
 Note: The `SOCKET` path is assumed to be absolute to the root of the host file system.
 
 [back to top](#table-of-contents)
+
 ---
 
 ## TLS/SSL Protocol
@@ -517,7 +527,7 @@ const fs = require('fs')
     , certFile = path.resolve(__dirname, 'ssl/client.crt')
     , keyFile = path.resolve(__dirname, 'ssl/client.key')
     , caFile = path.resolve(__dirname, 'ssl/ca.cert.pem')
-    , request = require('request');
+    , request = require('request-master');
 
 const options = {
   url: 'https://api.some-server.com/',
@@ -539,7 +549,7 @@ const fs = require('fs')
     , path = require('path')
     , certFile = path.resolve(__dirname, 'ssl/client.crt')
     , keyFile = path.resolve(__dirname, 'ssl/client.key')
-    , request = require('request');
+    , request = require('request-master');
 
 const options = {
   url: 'https://api.some-server.com/',
@@ -599,6 +609,7 @@ request.get({
 ```
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Support for HAR 1.2
@@ -607,7 +618,7 @@ The `options.har` property will override the values: `url`, `method`, `qs`, `hea
 A validation step will check if the HAR Request format matches the latest spec (v1.2) and will skip parsing if not matching.
 
 ```js
-const request = require('request')
+const request = require('request-master')
 request({
   // will be ignored
   method: 'GET',
@@ -645,10 +656,13 @@ request({
 ```
 
 [back to top](#table-of-contents)
+
 ---
 
-## request(options, callback)
-The first argument can be either a `url` or an `options` object. The only required option is `uri`; all others are optional.
+## All available options
+`request(options, callback)`
+
+The first argument can be either a `url` or an `options` object. The only *required* option is `uri`; all others are *optional*.
 
 - `uri` || `url` - fully qualified uri or a parsed url object from `url.parse()`
 - `baseUrl` - fully qualified uri string used as the base url. Most useful with `request.defaults`, for example when you want to do many requests to the same domain. If `baseUrl` is `https://example.com/api/`, then requesting `/end/point?test=true` will fetch `https://example.com/api/end/point?test=true`. When `baseUrl` is given, `uri` must also be a string.
@@ -666,13 +680,9 @@ The first argument can be either a `url` or an `options` object. The only requir
 
 - `body` - entity body for PATCH, POST and PUT requests. Must be a `Buffer`, `String` or `ReadStream`. If `json` is `true`, then `body` must be a JSON-serializable object.
 - `form` - when passed an object or a querystring, this sets `body` to a querystring representation of value, and adds `Content-type: application/x-www-form-urlencoded` header. When passed no options, a `FormData` instance is returned (and is piped to request). See "Forms" section above.
-- `formData` - data to pass for a `multipart/form-data` request. See
-  [Forms](#forms) section above.
+- `formData` - data to pass for a `multipart/form-data` request. See [Forms](#forms) section above.
 - `multipart` - array of objects which contain their own headers and `body` attributes. Sends a `multipart/related` request. See [Forms](#forms) section above.
-  - Alternatively you can pass in an object `{chunked: false, data: []}` where
-    `chunked` is used to specify whether the request is sent in
-    [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding)
-    In non-chunked requests, data items with body streams are not allowed.
+  - Alternatively you can pass in an object `{chunked: false, data: []}` where `chunked` is used to specify whether the request is sent in [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding). In non-chunked requests, data items with body streams are not allowed.
 - `preambleCRLF` - append a newline/CRLF before the boundary of your `multipart/form-data` request.
 - `postambleCRLF` - append a newline/CRLF at the end of the boundary of your `multipart/form-data` request.
 - `json` - sets `body` to JSON representation of value and adds `Content-type: application/json` header. Additionally, parses the response body as JSON.
@@ -699,7 +709,7 @@ The first argument can be either a `url` or an `options` object. The only requir
 
 - `encoding` - encoding to be used on `setEncoding` of response data. If `null`, the `body` is returned as a `Buffer`. Anything else **(including the default value of `undefined`)** will be passed as the [encoding](http://nodejs.org/api/buffer.html#buffer_buffer) parameter to `toString()` (meaning this is effectively `utf8` by default). (**Note:** if you expect binary data, you should set `encoding: null`.)
 - `gzip` - if `true`, add an `Accept-Encoding` header to request compressed content encodings from the server (if not already present) and decode supported content encodings in the response. **Note:** Automatic decoding of the response content is performed on the body data returned through `request` (both through the `request` stream and passed to the callback function) but is not performed on the `response` stream (available from the `response` event) which is the unmodified `http.IncomingMessage` object which may contain compressed data. See example below.
-- `jar` - if `true`, remember cookies for future use (or define your custom cookie jar; see examples section)
+- `jar` - if `true`, remember cookies for future use (or define your custom cookie jar; see [examples section](#examples))
 
 ---
 
@@ -709,32 +719,26 @@ The first argument can be either a `url` or an `options` object. The only requir
 - `forever` - set to `true` to use the [forever-agent](https://github.com/request/forever-agent) **Note:** Defaults to `http(s).Agent({keepAlive:true})` in node 0.12+
 - `pool` - an object describing which agents to use for the request. If this option is omitted the request will use the global agent (as long as your options allow for it). Otherwise, request will search the pool for your custom agent. If no custom agent is found, a new agent will be created and added to the pool. **Note:** `pool` is used only when the `agent` option is not specified.
   - A `maxSockets` property can also be provided on the `pool` object to set the max number of sockets for all agents created (ex: `pool: {maxSockets: Infinity}`).
-  - Note that if you are sending multiple requests in a loop and creating
-    multiple new `pool` objects, `maxSockets` will not work as intended. To
-    work around this, either use [`request.defaults`](#requestdefaultsoptions)
-    with your pool options or create the pool object with the `maxSockets`
-    property outside of the loop.
+  - Note that if you are sending multiple requests in a loop and creating multiple new `pool` objects, `maxSockets` will not work as intended. To work around this, either use [`request.defaults`](#requestdefaultsoptions) with your pool options or create the pool object with the `maxSockets` property outside of the loop.
 - `timeout` - integer containing number of milliseconds, controls two timeouts.
   - **Read timeout**: Time to wait for a server to send response headers (and start the response body) before aborting the request.
   - **Connection timeout**: Sets the socket to timeout after `timeout` milliseconds of inactivity. Note that increasing the timeout beyond the OS-wide TCP connection timeout will not have any effect ([the default in Linux can be anywhere from 20-120 seconds][linux-timeout])
 
 [linux-timeout]: http://www.sekuda.com/overriding_the_default_linux_kernel_20_second_tcp_socket_connect_timeout
+
 ---
 
 - `localAddress` - local interface to bind for network connections.
 - `proxy` - an HTTP proxy to be used. Supports proxy Auth with Basic Auth, identical to support for the `url` parameter (by embedding the auth info in the `uri`)
 - `strictSSL` - if `true`, requires SSL certificates be valid. **Note:** to use your own certificate authority, you need to specify an agent that was created with that CA as an option.
-- `tunnel` - controls the behavior of
-  [HTTP `CONNECT` tunneling](https://en.wikipedia.org/wiki/HTTP_tunnel#HTTP_CONNECT_tunneling)
-  as follows:
+- `tunnel` - controls the behavior of [HTTP `CONNECT` tunneling](https://en.wikipedia.org/wiki/HTTP_tunnel#HTTP_CONNECT_tunneling) as follows:
    - `undefined` (default) - `true` if the destination is `https`, `false` otherwise
    - `true` - always tunnel to the destination by making a `CONNECT` request to
      the proxy
    - `false` - request the destination as a `GET` request.
-- `proxyHeaderWhiteList` - a whitelist of headers to send to a
-  tunneling proxy.
-- `proxyHeaderExclusiveList` - a whitelist of headers to send
-  exclusively to a tunneling proxy and not to destination.
+- `proxyHeaderWhiteList` - a whitelist of headers to send to a tunneling proxy.
+- `proxyHeaderExclusiveList` - a whitelist of headers to send exclusively to a tunneling proxy and not to destination.
+
 ---
 
 - `time` - if `true`, the request-response cycle (including all redirects) is timed at millisecond resolution. When set, the following properties are added to the response object:
@@ -765,6 +769,7 @@ The callback argument gets 3 arguments:
 3. The third is the `response` body (`String` or `Buffer`, or JSON object if the `json` option is supplied)
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Convenience methods
@@ -820,23 +825,25 @@ request.jar()
 Function that returns the specified response header field using a [case-insensitive match](https://tools.ietf.org/html/rfc7230#section-3.2)
 
 ```js
-request('https://duckduckgo.com', function (error, response, body) {
+request('https://duckduckgo.com', function onResponse(error, response, body) {
   // print the Content-Type header even if the server returned it as 'content-type' (lowercase)
   console.log('Content-Type is:', response.caseless.get('Content-Type'));
 });
 ```
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Debugging
 There are at least three ways to debug the operation of `request`:
 
 1. Launch the node process like `NODE_DEBUG=request node script.js` (`lib,request,otherlib` works too).
-2. Set `require('request').debug = true` at any time (this does the same thing as #1).
+2. Set `require('request-master').debug = true` at any time (this does the same thing as #1).
 3. Use the [request-debug module](https://github.com/request/request-debug) to view request and response headers and bodies.
 
 [back to top](#table-of-contents)
+
 ---
 
 ## Timeouts
@@ -858,9 +865,9 @@ request.get('http://10.255.255.1', {timeout: 1500}, function(err) {
 
 [connect]: http://linux.die.net/man/2/connect
 
-## Examples:
+## Examples
 ```js
-const request = require('request')
+const request = require('request-master')
   , rand = Math.floor(Math.random()*100000000).toString()
   ;
 request(
@@ -887,7 +894,7 @@ request(
 For backwards-compatibility, response compression is not supported by default. To accept gzip-compressed responses, set the `gzip` option to `true`. Note that the body data passed through `request` is automatically decompressed while the response object is unmodified and will contain compressed data if the server sent a compressed response.
 
 ```js
-const request = require('request')
+const request = require('request-master')
 request(
   { method: 'GET'
   , uri: 'http://duckduckgo.com'
@@ -912,7 +919,7 @@ request(
 })
 ```
 
-Cookies are disabled by default (else, they would be used in subsequent requests). To enable cookies, set `jar` to `true` (either in `defaults` or `options`).
+Cookies are *disabled* by default (else, they would be used in subsequent requests). To enable cookies, set `jar` to `true` (either in `defaults` or `options`).
 
 ```js
 const request = request.defaults({jar: true})
@@ -931,7 +938,7 @@ request('https://duckduckgo.com', function() {
 })
 ```
 
-OR
+or
 
 ```js
 const j = request.jar();
