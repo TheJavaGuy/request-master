@@ -1,13 +1,15 @@
 {
   "name": "request-master",
-  "description": "Simplified HTTP request client.",
+  "description": "Easy to use HTTP/HTTPS request client.",
   "keywords": [
     "http",
+    "https",
+    "request",
+    "request client",
     "simple",
-    "util",
     "utility"
   ],
-  "version": "2.89.0-0",
+  "version": "2.89.0-1",
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com>",
   "contributors": [
     {"name": "Ivan Milosavljević (TheJavaGuy)", "email": "TheJavaGuy@yandex.com"}

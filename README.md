@@ -3,8 +3,8 @@
 [![Build status](https://img.shields.io/travis/request/request/master.svg?style=flat-square)](https://travis-ci.org/request/request)
 [![Coverage](https://img.shields.io/codecov/c/github/request/request.svg?style=flat-square)](https://codecov.io/github/request/request?branch=master)
 [![Coverage](https://img.shields.io/coveralls/request/request.svg?style=flat-square)](https://coveralls.io/r/request/request)
-[![Dependency Status](https://img.shields.io/david/request/request.svg?style=flat-square)](https://david-dm.org/request/request)
-[![Known Vulnerabilities](https://snyk.io/test/npm/request/badge.svg?style=flat-square)](https://snyk.io/test/npm/request)
+[![Dependency Status](https://img.shields.io/david/thejavaguy/request-master.svg?style=flat-square)](https://david-dm.org/thejavaguy/request-master)
+[![Known Vulnerabilities](https://snyk.io/test/npm/request-master/badge.svg?style=flat-square)](https://snyk.io/test/npm/request-master)
 
 # Under active development!
 RequestMaster is a drop-in, API compatible replacement for the original Request! Original Request library [is deprecated](https://github.com/request/request/issues/3142) as of Feb 11th 2020. But don't worry, **RequestMaster is actively developed**! We'll deliver new releases once a quarter, starting from Q4 2020.
@@ -288,7 +288,7 @@ const username = 'username',
     password = 'password',
     url = 'http://' + username + ':' + password + '@some.server.com';
 
-request({url}, function (error, response, body) {
+request({url}, function onResponse(error, response, body) {
    // Do more stuff with 'body' here
 });
 ```
@@ -343,7 +343,7 @@ const qs = require('querystring')
     }
   , url = 'https://api.twitter.com/oauth/request_token'
   ;
-request.post({url:url, oauth:oauth}, function (e, r, body) {
+request.post({url:url, oauth:oauth}, function onResponse(e, r, body) {
   // Ideally, you would take the body in the response
   // and construct a URL that a user clicks on (like a sign in button).
   // The verifier is only available in the response after a user has
@@ -391,12 +391,12 @@ request.post({url:url, oauth:oauth}, function (e, r, body) {
 
 For [RSA-SHA1 signing](https://tools.ietf.org/html/rfc5849#section-3.4.3), make the following changes to the OAuth options object:
 * Pass `signature_method : 'RSA-SHA1'`
-* Instead of `consumer_secret`, specify a `private_key` string in [PEM format](http://how2ssl.com/articles/working_with_pem_files/)
+* Instead of `consumer_secret`, specify a `private_key` string in [PEM format](https://geeklah.com/working_with_pem_files.html)
 
-For [PLAINTEXT signing](http://oauth.net/core/1.0/#anchor22), make the following changes to the OAuth options object:
+For [PLAINTEXT signing](https://oauth.net/core/1.0/#anchor22), make the following changes to the OAuth options object:
 * Pass `signature_method : 'PLAINTEXT'`
 
-To send OAuth parameters via query params or in a post body as described in The [Consumer Request Parameters](http://oauth.net/core/1.0/#consumer_req_param) section of the oauth1 spec:
+To send OAuth parameters via query params or in a post body as described in The [Consumer Request Parameters](https://oauth.net/core/1.0/#consumer_req_param) section of the oauth1 spec:
 * Pass `transport_method : 'query'` or `transport_method : 'body'` in the OAuth options object.
 * `transport_method` defaults to `'header'`
 
@@ -411,7 +411,7 @@ To use [Request Body Hash](https://oauth.googlecode.com/svn/spec/ext/body_hash/1
 ## Proxies
 If you specify a `proxy` option, then the request (and any subsequent redirects) will be sent via a connection to the proxy server.
 
-If your endpoint is an `https` url, and you are using a proxy, then request will send a `CONNECT` request to the proxy server *first*, and then use the supplied connection to connect to the endpoint.
+If your endpoint is an `https` URL, and you are using a proxy, then request will send a `CONNECT` request to the proxy server *first*, and then use the supplied connection to connect to the endpoint.
 
 That is, first it will make a request like:
 
@@ -443,7 +443,7 @@ Other-Headers: all go here
 request body or whatever
 ```
 
-Because a pure "http over http" tunnel offers no additional security or other features, it is generally simpler to go with a straightforward HTTP proxy in this case. However, if you would like to force a tunneling proxy, you may set the `tunnel` option to `true`.
+Because a pure "HTTP over HTTP" tunnel offers no additional security or other features, it is generally simpler to go with a straightforward HTTP proxy in this case. However, if you would like to force a tunneling proxy, you may set the `tunnel` option to `true`.
 
 You can also make a standard proxied `http` request by explicitly setting `tunnel : false`, but **note that this will allow the proxy to see the traffic to/from the destination server**.
 
@@ -664,10 +664,10 @@ request({
 
 The first argument can be either a `url` or an `options` object. The only *required* option is `uri`; all others are *optional*.
 
-- `uri` || `url` - fully qualified uri or a parsed url object from `url.parse()`
-- `baseUrl` - fully qualified uri string used as the base url. Most useful with `request.defaults`, for example when you want to do many requests to the same domain. If `baseUrl` is `https://example.com/api/`, then requesting `/end/point?test=true` will fetch `https://example.com/api/end/point?test=true`. When `baseUrl` is given, `uri` must also be a string.
-- `method` - http method (default: `"GET"`)
-- `headers` - http headers (default: `{}`)
+- `uri` || `url` - fully qualified URI or a parsed url object from `url.parse()`
+- `baseUrl` - fully qualified URI string used as the base URL. Most useful with `request.defaults`, for example when you want to do many requests to the same domain. If `baseUrl` is `https://example.com/api/`, then requesting `/end/point?test=true` will fetch `https://example.com/api/end/point?test=true`. When `baseUrl` is given, `uri` must also be a string.
+- `method` - HTTP method, as string (default: `"GET"`)
+- `headers` - HTTP headers, as object (default: `{}`)
 
 ---
 
@@ -715,7 +715,7 @@ The first argument can be either a `url` or an `options` object. The only *requi
 
 - `agent` - `http(s).Agent` instance to use
 - `agentClass` - alternatively specify your agent's class name
-- `agentOptions` - and pass its options. **Note:** for HTTPS see [tls API doc for TLS/SSL options](http://nodejs.org/api/tls.html#tls_tls_connect_options_callback) and the [documentation above](#using-optionsagentoptions).
+- `agentOptions` - and pass its options. **Note:** for HTTPS see [tls API doc for TLS/SSL options](https://nodejs.org/api/tls.html#tls_tls_connect_options_callback) and the [documentation above](#using-optionsagentoptions).
 - `forever` - set to `true` to use the [forever-agent](https://github.com/request/forever-agent) **Note:** Defaults to `http(s).Agent({keepAlive:true})` in node 0.12+
 - `pool` - an object describing which agents to use for the request. If this option is omitted the request will use the global agent (as long as your options allow for it). Otherwise, request will search the pool for your custom agent. If no custom agent is found, a new agent will be created and added to the pool. **Note:** `pool` is used only when the `agent` option is not specified.
   - A `maxSockets` property can also be provided on the `pool` object to set the max number of sockets for all agents created (ex: `pool: {maxSockets: Infinity}`).
@@ -724,7 +724,7 @@ The first argument can be either a `url` or an `options` object. The only *requi
   - **Read timeout**: Time to wait for a server to send response headers (and start the response body) before aborting the request.
   - **Connection timeout**: Sets the socket to timeout after `timeout` milliseconds of inactivity. Note that increasing the timeout beyond the OS-wide TCP connection timeout will not have any effect ([the default in Linux can be anywhere from 20-120 seconds][linux-timeout])
 
-[linux-timeout]: http://www.sekuda.com/overriding_the_default_linux_kernel_20_second_tcp_socket_connect_timeout
+[linux-timeout]: http://willbryant.net/overriding_the_default_linux_kernel_20_second_tcp_socket_connect_timeout
 
 ---
 
