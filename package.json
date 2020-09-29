@@ -12,7 +12,10 @@
   "version": "2.89.0-1",
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com>",
   "contributors": [
-    {"name": "Ivan Milosavljević (TheJavaGuy)", "email": "TheJavaGuy@yandex.com"}
+    {
+      "name": "Ivan Milosavljević (TheJavaGuy)",
+      "email": "TheJavaGuy@yandex.com"
+    }
   ],
   "repository": {
     "type": "git",
@@ -39,7 +42,7 @@
     "extend": "~3.0.2",
     "forever-agent": "~0.6.1",
     "form-data": "~2.3.2",
-    "har-validator": "~5.1.3",
+    "har-validator": "5.1.5",
     "http-signature": "~1.2.0",
     "is-typedarray": "~1.0.0",
     "isstream": "~0.1.2",
