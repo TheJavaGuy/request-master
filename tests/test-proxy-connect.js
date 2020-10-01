@@ -1,37 +1,37 @@
-'use strict'
+'use strict';
 
-var request = require('../index')
-var tape = require('tape')
+var request = require('../index');
+var tape = require('tape');
 
-var called = false
-var proxiedHost = 'google.com'
-var data = ''
+var called = false;
+var proxiedHost = 'google.com';
+var data = '';
 
 var s = require('net').createServer(function (sock) {
-  called = true
+  called = true;
   sock.once('data', function (c) {
-    data += c
+    data += c;
 
-    sock.write('HTTP/1.1 200 OK\r\n\r\n')
+    sock.write('HTTP/1.1 200 OK\r\n\r\n');
 
     sock.once('data', function (c) {
-      data += c
+      data += c;
 
-      sock.write('HTTP/1.1 200 OK\r\n')
-      sock.write('content-type: text/plain\r\n')
-      sock.write('content-length: 5\r\n')
-      sock.write('\r\n')
-      sock.end('derp\n')
-    })
-  })
-})
+      sock.write('HTTP/1.1 200 OK\r\n');
+      sock.write('content-type: text/plain\r\n');
+      sock.write('content-length: 5\r\n');
+      sock.write('\r\n');
+      sock.end('derp\n');
+    });
+  });
+});
 
 tape('setup', function (t) {
   s.listen(0, function () {
-    s.url = 'http://localhost:' + this.address().port
-    t.end()
-  })
-})
+    s.url = 'http://localhost:' + this.address().port;
+    t.end();
+  });
+});
 
 tape('proxy', function (t) {
   request({
@@ -48,9 +48,9 @@ tape('proxy', function (t) {
     },
     proxyHeaderExclusiveList: ['Dont-send-to-dest']
   }, function (err, res, body) {
-    t.equal(err, null)
-    t.equal(res.statusCode, 200)
-    t.equal(body, 'derp\n')
+    t.equal(err, null);
+    t.equal(res.statusCode, 200);
+    t.equal(body, 'derp\n');
     var re = new RegExp([
       'CONNECT google.com:80 HTTP/1.1',
       'Proxy-Authorization: Basic dXNlcjpwYXNz',
@@ -66,15 +66,15 @@ tape('proxy', function (t) {
       'accept: yo',
       'user-agent: just another foobar',
       'host: google.com'
-    ].join('\r\n'))
-    t.equal(true, re.test(data))
-    t.equal(called, true, 'the request must be made to the proxy server')
-    t.end()
-  })
-})
+    ].join('\r\n'));
+    t.equal(true, re.test(data));
+    t.equal(called, true, 'the request must be made to the proxy server');
+    t.end();
+  });
+});
 
 tape('cleanup', function (t) {
   s.close(function () {
-    t.end()
-  })
-})
+    t.end();
+  });
+});
