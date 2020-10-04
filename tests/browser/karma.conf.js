@@ -1,5 +1,5 @@
-'use strict'
-var istanbul = require('browserify-istanbul')
+'use strict';
+var istanbul = require('browserify-istanbul');
 
 module.exports = function (config) {
   config.set({
@@ -53,5 +53,5 @@ module.exports = function (config) {
         ]
       }
     }
-  })
-}
+  });
+};

@@ -1,11 +1,11 @@
-'use strict'
+'use strict';
 
-var http = require('http')
-var request = require('../index')
-var httpSignature = require('http-signature')
-var tape = require('tape')
+var http = require('http');
+var request = require('../index');
+var httpSignature = require('http-signature');
+var tape = require('tape');
 
-var privateKeyPEMs = {}
+var privateKeyPEMs = {};
 
 privateKeyPEMs['key-1'] =
   '-----BEGIN RSA PRIVATE KEY-----\n' +
@@ -34,9 +34,9 @@ privateKeyPEMs['key-1'] =
   'LfUlpgECgYArBvFcBxSkNAzR3Rtteud1YDboSKluRM37Ey5plrn4BS0DD0jm++aD\n' +
   '0pG2Hsik000hibw92lCkzvvBVAqF8BuAcnPlAeYfsOaa97PGEjSKEN5bJVWZ9/om\n' +
   '9FV1axotRN2XWlwrhixZLEaagkREXhgQc540FS5O8IaI2Vpa80Atzg==\n' +
-  '-----END RSA PRIVATE KEY-----'
+  '-----END RSA PRIVATE KEY-----';
 
-var publicKeyPEMs = {}
+var publicKeyPEMs = {};
 
 publicKeyPEMs['key-1'] =
   '-----BEGIN PUBLIC KEY-----\n' +
@@ -47,7 +47,7 @@ publicKeyPEMs['key-1'] =
   '14wS7OQPigu6G99dpn/iPHa3zBm87baBWDbqZWRW0BP3K6eqq8sut1+NLhNW8ADP\n' +
   'TdnO/SO+kvXy7fqd8atSn+HlQcx6tW42dhXf3E9uE7K78eZtW0KvfyNGAjsI1Fft\n' +
   '2QIDAQAB\n' +
-  '-----END PUBLIC KEY-----'
+  '-----END PUBLIC KEY-----';
 
 publicKeyPEMs['key-2'] =
   '-----BEGIN PUBLIC KEY-----\n' +
@@ -58,22 +58,22 @@ publicKeyPEMs['key-2'] =
   'qqmW7RLIsLT59SWmpXdhFKnkYYGhxrk1Mwl22dBTJNY5SbriU5G3gWgzYkm8pgHr\n' +
   '6CtrXch9ciJAcDJehPrKXNvNDOdUh8EW3fekNJerF1lWcwQg44/12v8sDPyfbaKB\n' +
   'dQIDAQAB\n' +
-  '-----END PUBLIC KEY-----'
+  '-----END PUBLIC KEY-----';
 
 var server = http.createServer(function (req, res) {
-  var parsed = httpSignature.parseRequest(req)
-  var publicKeyPEM = publicKeyPEMs[parsed.keyId]
-  var verified = httpSignature.verifySignature(parsed, publicKeyPEM)
-  res.writeHead(verified ? 200 : 400)
-  res.end()
-})
+  var parsed = httpSignature.parseRequest(req);
+  var publicKeyPEM = publicKeyPEMs[parsed.keyId];
+  var verified = httpSignature.verifySignature(parsed, publicKeyPEM);
+  res.writeHead(verified ? 200 : 400);
+  res.end();
+});
 
 tape('setup', function (t) {
   server.listen(0, function () {
-    server.url = 'http://localhost:' + this.address().port
-    t.end()
-  })
-})
+    server.url = 'http://localhost:' + this.address().port;
+    t.end();
+  });
+});
 
 tape('correct key', function (t) {
   var options = {
@@ -81,13 +81,13 @@ tape('correct key', function (t) {
       keyId: 'key-1',
       key: privateKeyPEMs['key-1']
     }
-  }
+  };
   request(server.url, options, function (err, res, body) {
-    t.equal(err, null)
-    t.equal(200, res.statusCode)
-    t.end()
-  })
-})
+    t.equal(err, null);
+    t.equal(200, res.statusCode);
+    t.end();
+  });
+});
 
 tape('incorrect key', function (t) {
   var options = {
@@ -95,16 +95,16 @@ tape('incorrect key', function (t) {
       keyId: 'key-2',
       key: privateKeyPEMs['key-1']
     }
-  }
+  };
   request(server.url, options, function (err, res, body) {
-    t.equal(err, null)
-    t.equal(400, res.statusCode)
-    t.end()
-  })
-})
+    t.equal(err, null);
+    t.equal(400, res.statusCode);
+    t.end();
+  });
+});
 
 tape('cleanup', function (t) {
   server.close(function () {
-    t.end()
-  })
-})
+    t.end();
+  });
+});
