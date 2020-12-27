@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+mysql_data
+log
+.git
+.gitignore
+Dockerfile.*
+.dockerignore
+docker-compose*
+.idea
+*.iml
