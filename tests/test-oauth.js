@@ -23,7 +23,7 @@ function getSignature (r) {
 var hmacsign = oauth.hmacsign;
 var hmacsign256 = oauth.hmacsign256;
 var rsasign = oauth.rsasign;
-var rsaPrivatePEM = fs.readFileSync(path.join(__dirname, 'ssl', 'test.key'));
+var rsaPrivatePEM = fs.readFileSync(path.join(__dirname, 'ssl', 'ca', 'test.key'));
 var reqsign;
 var reqsign256;
 var reqsignRSA;
@@ -72,7 +72,7 @@ tape('reqsignRSA', function (t) {
       oauth_version: '1.0'
     }, rsaPrivatePEM, 'this parameter is not used for RSA signing');
 
-  t.equal(reqsignRSA, 'MXdzEnIrQco3ACPoVWxCwv5pxYrm5MFRXbsP3LfRV+zfcRr+WMp/dOPS/3r+Wcb+17Z2IK3uJ8dMHfzb5LiDNCTUIj7SWBrbxOpy3Y6SA6z3vcrtjSekkTHLek1j+mzxOi3r3fkbYaNwjHx3PyoFSazbEstnkQQotbITeFt5FBE=');
+  t.equal(reqsignRSA, 'zIS6mKpn0WO7742N9exEKRUB9lDlc6h3fW+nV0h/dO55UAcVeF7DWgv4g+ll1YAWiK4a+xEaos/QI/Kg94VMftSytoqq3tXG2rZeTU6pgGZNKN+0Eq788et9vKMYBRxTTjIwkJklKCIlcvNgsXSmHCcJ544BExUfs9DURqK7Xnn+SdQRZ1zaMlfUfcbz6ClfT23Nsjag5O+90GqPiEIlVxuJIIJTT5uOi4n6dNNgM5Sy5Mz+TZOgmHIe3YybUFMxRIHzw3fH6mGZjO5pjWr5cb9vvqSc3fT2wHPxciPldOi8QQnS3PgqNL7MV5Tlv5w7yd8L/r0LcWkzpHmgCl83NQ==');
   t.end();
 });
 
@@ -117,7 +117,7 @@ tape('accsignRSA', function (t) {
       oauth_version: '1.0'
     }, rsaPrivatePEM);
 
-  t.equal(accsignRSA, 'gZrMPexdgGMVUl9H6RxK0MbR6Db8tzf2kIIj52kOrDFcMgh4BunMBgUZAO1msUwz6oqZIvkVqyfyDAOP2wIrpYem0mBg3vqwPIroSE1AlUWo+TtQxOTuqrU+3kDcXpdvJe7CAX5hUx9Np/iGRqaCcgByqb9DaCcQ9ViQ+0wJiXI=');
+  t.equal(accsignRSA, 'jzVeMZPno8amJJBtovOp2bD9sY//LLi7TUD4e7qdbCzUOd3bJQZqyrGa1eoft6Quh5yfXm8FQWxILI25naeU1zC5frOVuYsviS0dRvxhfadG6qYnYgzIGSFFYVUIIF228d6w5ahs/lksEzFMJfbHOyRThfTQqS8GtYVZC2f/5CFB+dKeUs6ev5nknO1olooiwWDOeWOhQsnX2SFO0H6HKCDC0QNmeZfmo5R/Ngg/G3LQY7MjnmwiFt7Fz7iLmMWlT6yu4G3scEKXwtNgzn7C77j6lCpU6mYBWHZrn9DsjWjF8eJoR6ulGTJEJY1my1XD0EZump0S/Pbga2YwMZDFHA==');
   t.end();
 });
 
@@ -162,7 +162,7 @@ tape('upsignRSA', function (t) {
       status: 'setting up my twitter 私のさえずりを設定する'
     }, rsaPrivatePEM);
 
-  t.equal(upsignRSA, 'fF4G9BNzDxPu/htctzh9CWzGhtXo9DYYl+ZyRO1/QNOhOZPqnWVUOT+CGUKxmAeJSzLKMAH8y/MFSHI0lzihqwgfZr7nUhTx6kH7lUChcVasr+TZ4qPqvGGEhfJ8Av8D5dF5fytfCSzct62uONU0iHYVqainP+zefk1K7Ptb6hI=');
+  t.equal(upsignRSA, 'u1xvzIDmp1HTWEvwPE6wdT7hUko151HKKBllpcVXBFIkB/MZRsdTdi6+EYA3/9p3QzpQrjh7w5Zc7uFmiqVjcRZNBg5aJBwihSHs9/2DgK+j36vHynXyRn993OKTDEbwh3OjdxUnFNxPJqHVXSAfGviuWbbs4plfP5dohC+yXqwxcLxmJ0TZU60TNQ12ey/nNUUWDVpbzoMkAfRpgAtS4K2qjqzqdZQlc0wlkBtVi+TmTuVaI42/qX4LixZwcV99kZB2kBlN2Ps8wElfz225SIRGjBTWPkKHlotjxj5cIdnbWG80HvE6bzQf4Pf20hu5pSJ4nrxGMEyotuWRyKNC8w==');
   t.end();
 });
 
@@ -337,7 +337,7 @@ tape('rfc5849 RSA example', function (t) {
 
   process.nextTick(function () {
     // different signature in rfc5849 because request sets oauth_version by default
-    t.equal('ThNYfZhYogcAU6rWgI3ZFlPEhoIXHMZcuMzl+jykJZW/ab+AxyefS03dyd64CclIZ0u8JEW64TQ5SHthoQS8aM8qir4t+t88lRF3LDkD2KtS1krgCZTUQxkDL5BO5pxsqAQ2Zfdcrzaxb6VMGD1Hf+Pno+fsHQo/UUKjq4V3RMo=', getSignature(rfc5849RSA));
+    t.equal(getSignature(rfc5849RSA), 'dp3Yo/CSrAiZOtNjuCjxWogZcAJaJtqgpb6ILgdoCR68smjKXPnSj2xKIik62V5F+YF96mdhF6UOK4p0IVF0NsZx+ZDsfMdxutMg2SVNmaMncYEynzhtcQefx3PvVIuW93N64SR/SjiCMLssFVr++RT+xq/ni+IjAk/zbsMUx6ugKX9ZhHFzgPfu3Ym5WcL8DGJGvAjkZ2DMqiV2Pi8QWneP3DhsMSEnXWUMXxZobuMJMuGwha0DkY5C7OyMAfLXutXhhMOWvKNyW+kvFyVxzeNj9j2SHHcCYcFh1oUthAwMc0WPCEQCLh0BL7q4paDSD/2UJqAr6PYiEtmJVvJBOg==');
     rfc5849RSA.abort();
     t.end();
   });
