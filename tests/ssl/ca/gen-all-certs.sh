@@ -4,3 +4,4 @@ set -ex
 ./gen-server.sh
 ./gen-client.sh
 ./gen-localhost.sh
+./gen-test.sh

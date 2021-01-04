@@ -1,5 +1,6 @@
 'use strict';
 var istanbul = require('browserify-istanbul');
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function (config) {
   config.set({
@@ -23,12 +24,12 @@ module.exports = function (config) {
 
     autoWatch: false,
 
-    browsers: ['PhantomJS_without_security'],
+    browsers: ['ChromeHeadless_without_security'],
 
     singleRun: true,
 
     plugins: [
-      'karma-phantomjs-launcher',
+      'karma-chrome-launcher',
       'karma-coverage',
       'karma-browserify',
       'karma-tap'
@@ -44,12 +45,13 @@ module.exports = function (config) {
       dir: 'coverage/'
     },
 
-    // Custom launcher to allowe self signed certs.
+    // Custom launcher to allow self signed certs
     customLaunchers: {
-      PhantomJS_without_security: {
-        base: 'PhantomJS',
+      ChromeHeadless_without_security: {
+        base: 'ChromeHeadless',
         flags: [
-          '--ignore-ssl-errors=true'
+          '--allow-insecure-localhost=true',
+          '--no-sandbox'
         ]
       }
     }

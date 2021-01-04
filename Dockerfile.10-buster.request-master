@@ -1,0 +1,19 @@
+FROM node:10-buster
+# set root password to something sane
+RUN echo 'root:Docker!' | chpasswd
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get -qq update && apt-get -qqy --no-install-recommends install less vim bsdmainutils apt-file && apt-file update
+# we use puppeteer so we must install some libs for it
+RUN apt-get -qqy --no-install-recommends install libnss3 libatk1.0-0 libatk-bridge2.0-0 libx11-xcb1 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgtk-3-0 libgbm1 libasound2
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+# create a dir inside image which will hold our app
+WORKDIR /home/node/app
+# copy package and package-lock to image
+COPY package*.json ./
+# switch to node user so that he owns all application code and node_modules
+USER node
+RUN npm ci
+# bundle app source inside image
+COPY --chown=node:node . .
+# finally, run tests
+#CMD ["npm", "run", "test"]
