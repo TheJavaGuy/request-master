@@ -50,7 +50,8 @@ module.exports = function (config) {
       ChromeHeadless_without_security: {
         base: 'ChromeHeadless',
         flags: [
-          '--allow-insecure-localhost=true'
+          '--allow-insecure-localhost=true',
+          '--no-sandbox'
         ]
       }
     }
