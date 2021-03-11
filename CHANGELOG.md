@@ -1,5 +1,10 @@
 ## Change Log
 
+### v3.0.0 '(2021/03/11)'
+- [#21](https://github.com/TheJavaGuy/request-master/pull/21) replace phantomjs with headless browser (@TheJavaGuy)
+- [#20](https://github.com/TheJavaGuy/request-master/pull/20) switch to CircleCI (@TheJavaGuy)
+- [#19](https://github.com/TheJavaGuy/request-master/pull/19) add docker container for tests (@TheJavaGuy)
+
 ### v2.89.0 '(2020/12/15)'
 - [#16](https://github.com/TheJavaGuy/request-master/pull/16) update karma (@TheJavaGuy)
 - [#15](https://github.com/TheJavaGuy/request-master/pull/15) add PR template (@TheJavaGuy)
